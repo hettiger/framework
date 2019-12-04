@@ -75,6 +75,21 @@ abstract class Facade
     }
 
     /**
+     * Set mock to defer unexpected methods to its parent if possible
+     *
+     * @return void
+     */
+    public static function makePartial()
+    {
+        if (static::isMock()) {
+            $name = static::getFacadeAccessor();
+            /** @var MockInterface $mock */
+            $mock = static::$resolvedInstance[$name];
+            $mock->makePartial();
+        }
+    }
+
+    /**
      * Create a fresh mock instance for the given class.
      *
      * @return \Mockery\MockInterface
